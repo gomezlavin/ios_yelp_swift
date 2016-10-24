@@ -19,11 +19,17 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var categories: [[String : String]] = []
     var switchStates = [Int:Bool]()
+    var deal = Bool()
+    var distance = String()
+    var sort = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         categories = yelpCategories()
+        deal = false
+        distance = "Auto"
+        sort = "Best Match"
         
         // Initializers
         tableView.dataSource = self
@@ -58,24 +64,71 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 4
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {       
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return 5
+        case 2:
+            return 3
+        case 3:
+            return categories.count
+        default:
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return "Deal"
+        case 1:
+            return "Distance"
+        case 2:
+            return "Sort By"
+        case 3:
+            return "Category"
+        default:
+            return ""
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
-        
-        cell.switchLabel.text = categories[indexPath.row]["name"]
-        cell.delegate = self
-        cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
-        
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
+            cell.switchLabel.text = "Offering a Deal"
+            cell.delegate = self
+            cell.onSwitch.isOn = self.deal
+            return cell
+        } else if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectCell", for: indexPath) as! SelectCell
+            cell.selectLabel.text = self.distance
+            return cell
+        } else if indexPath.section == 2 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectCell", for: indexPath) as! SelectCell
+            cell.selectLabel.text = self.sort
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
+            cell.switchLabel.text = categories[indexPath.row]["name"]
+            cell.delegate = self
+            cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+            return cell
+        }
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: switchCell)
-        switchStates[(indexPath?.row)!] = value
-        
+        if indexPath?.section == 0 {
+            self.deal = !self.deal
+        } else {
+            switchStates[(indexPath?.row)!] = value
+        }
     }
     
     /*

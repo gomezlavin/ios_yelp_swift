@@ -32,7 +32,6 @@ class SwitchCell: UITableViewCell {
     }
 
     func switchValueChanged() {
-        print("Switch value changed")
         delegate?.switchCell?(switchCell: self, didChangeValue: onSwitch.isOn)
     }
 }
