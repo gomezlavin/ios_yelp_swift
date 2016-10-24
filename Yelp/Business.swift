@@ -14,6 +14,7 @@ class Business: NSObject {
     let imageURL: URL?
     let categories: String?
     let distance: String?
+    let distanceMeters: NSNumber?
     let ratingImageURL: URL?
     let reviewCount: NSNumber?
     
@@ -57,7 +58,7 @@ class Business: NSObject {
             categories = nil
         }
         
-        let distanceMeters = dictionary["distance"] as? NSNumber
+        distanceMeters = dictionary["distance"] as? NSNumber
         if distanceMeters != nil {
             let milesPerMeter = 0.000621371
             distance = String(format: "%.2f mi", milesPerMeter * distanceMeters!.doubleValue)
@@ -88,7 +89,7 @@ class Business: NSObject {
         _ = YelpClient.sharedInstance.searchWithTerm(term, completion: completion)
     }
     
-    class func searchWithTerm(term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> Void {
-        _ = YelpClient.sharedInstance.searchWithTerm(term, sort: sort, categories: categories, deals: deals, completion: completion)
+    class func searchWithTerm(term: String, distanceMeters: NSNumber?, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> Void {
+        _ = YelpClient.sharedInstance.searchWithTerm(term, distanceMeters: distanceMeters, sort: sort, categories: categories, deals: deals, completion: completion)
     }
 }

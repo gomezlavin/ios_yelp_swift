@@ -18,18 +18,24 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     weak var delegate: FiltersViewControllerDelegate?
     
     var categories: [[String : String]] = []
+    var distanceOptions: [[String : String]] = []
+    var sortOptions: [[String : String]] = []
+    
     var switchStates = [Int:Bool]()
     var deal = Bool()
-    var distance = String()
-    var sort = String()
+    var distance = Int()
+    var sort = Int()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         categories = yelpCategories()
+        distanceOptions = yelpDistances()
+        sortOptions = yelpSortOptions()
+        
         deal = false
-        distance = "Auto"
-        sort = "Best Match"
+        distance = 0
+        sort = 0
         
         // Initializers
         tableView.dataSource = self
@@ -61,6 +67,12 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             filters["categories"] = selectedCategories as AnyObject?
         }
         
+        filters["deal"] = deal as AnyObject?
+        filters["distance"] = distanceOptions[distance]["code"] as AnyObject?
+        filters["sort"] = sortOptions[sort]["code"] as AnyObject?
+        
+        print(filters)
+        
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
     
@@ -86,7 +98,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "Deal"
+            return ""
         case 1:
             return "Distance"
         case 2:
@@ -107,11 +119,17 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             return cell
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SelectCell", for: indexPath) as! SelectCell
-            cell.selectLabel.text = self.distance
+            cell.selectLabel.text = distanceOptions[indexPath.row]["name"]
+            if indexPath.row == 0 {
+                cell.accessoryType = .checkmark
+            }
             return cell
         } else if indexPath.section == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SelectCell", for: indexPath) as! SelectCell
-            cell.selectLabel.text = self.sort
+            cell.selectLabel.text = sortOptions[indexPath.row]["name"]
+            if indexPath.row == 0 {
+                cell.accessoryType = .checkmark
+            }
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
@@ -131,6 +149,30 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if (indexPath.section == 1) {
+            if indexPath.row != distance {
+                let oldIndexPath = IndexPath(row: distance, section: indexPath.section)
+                var cell = tableView.cellForRow(at: oldIndexPath)
+                cell?.accessoryType = .none
+                cell = tableView.cellForRow(at: indexPath)
+                cell?.accessoryType = .checkmark
+                distance = indexPath.row
+            }
+        } else {
+            if indexPath.row != sort {
+                let oldIndexPath = IndexPath(row: sort, section: indexPath.section)
+                var cell = tableView.cellForRow(at: oldIndexPath)
+                cell?.accessoryType = .none
+                cell = tableView.cellForRow(at: indexPath)
+                cell?.accessoryType = .checkmark
+                sort = indexPath.row
+            }
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -141,7 +183,25 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     */
     
-    func yelpCategories() -> [[String:String]] {
+    func yelpDistances() -> [[String : String]] {
+        return [
+            ["name" : "Auto", "code": "804"],
+            ["name" : "0.3 miles", "code": "482"],
+            ["name" : "1 mile", "code": "1600"],
+            ["name" : "5 miles", "code": "8046"],
+            ["name" : "20 miles", "code": "32186"]
+        ]
+    }
+    
+    func yelpSortOptions() -> [[String : String]] {
+        return [
+            ["name" : "Best Match", "code": "0"],
+            ["name" : "Distance", "code": "1"],
+            ["name" : "Highest Rated", "code": "2"]
+        ]
+    }
+    
+    func yelpCategories() -> [[String : String]] {
         return [
             ["name" : "Afghan", "code": "afghani"],
             ["name" : "African", "code": "african"],

@@ -26,7 +26,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="147"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dfs-Qx-1ee" id="xAX-7C-h4c">
-                                            <frame key="frameInset" width="375" height="147"/>
+                                            <frame key="frameInset" width="375" height="146.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vsH-NX-EEC">
@@ -194,7 +194,7 @@
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="ZC6-55-Wr6" secondAttribute="trailing" constant="15" id="VDi-Sp-BTb"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZC6-55-Wr6" secondAttribute="trailing" constant="90" id="VDi-Sp-BTb"/>
                                                 <constraint firstItem="ZC6-55-Wr6" firstAttribute="centerY" secondItem="tJj-Fn-pvW" secondAttribute="centerY" id="eEs-pT-Yer"/>
                                                 <constraint firstItem="Fes-ah-f2R" firstAttribute="top" secondItem="tJj-Fn-pvW" secondAttribute="top" constant="10" id="eYe-eE-Ow5"/>
                                                 <constraint firstItem="Fes-ah-f2R" firstAttribute="leading" secondItem="tJj-Fn-pvW" secondAttribute="leading" constant="15" id="mjW-cn-abv"/>
@@ -202,6 +202,7 @@
                                                 <constraint firstItem="Fes-ah-f2R" firstAttribute="centerY" secondItem="tJj-Fn-pvW" secondAttribute="centerY" id="zO6-Ta-Duh"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="selectImageView" destination="ZC6-55-Wr6" id="9A3-Lx-hgG"/>
                                             <outlet property="selectLabel" destination="Fes-ah-f2R" id="H2S-pW-SO9"/>
