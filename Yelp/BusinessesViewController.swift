@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate, UIScrollViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var filterBarButtonItem: UIBarButtonItem!
@@ -16,6 +16,14 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var businesses: [Business]!
     var filteredBusinesses: [Business]!
     var searchBar = UISearchBar()
+    var isMoreDataLoading = false
+    var limit = NSNumber(integerLiteral: 25)
+    var offset = NSNumber(integerLiteral: 0)
+    
+//    var categories = [String]()
+//    var sortOptions = YelpSortMode(rawValue: 0)
+//    var distanceMeters = NSNumber()
+//    var withDeal = Bool()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,14 +41,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             self.businesses = businesses
             self.filteredBusinesses = businesses
             self.tableView.reloadData()
-//            if let businesses = businesses {
-//                for business in businesses {
-//                    print(business)
-//                    print(business.name!)
-//                    print(business.address!)
-//                }
-//            }
-            
             }
         )
     }
@@ -99,10 +99,43 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         let distanceMeters = NSNumber(integerLiteral: Int(filters["distance"] as! String)!)
         let withDeal = filters["deal"] as? Bool
         
-        Business.searchWithTerm(term: "Restaurants", distanceMeters: distanceMeters, sort: sortOptions, categories: categories, deals: withDeal) { (businesses: [Business]?, error: Error?) -> Void in
+//        categories = (filters["categories"] as? [String]!)!
+//        sortOptions = YelpSortMode(rawValue: Int(filters["sort"] as! String)!)
+//        distanceMeters = NSNumber(integerLiteral: Int(filters["distance"] as! String)!)
+//        withDeal = (filters["deal"] as? Bool)!
+        
+//        loadMoreData()
+        offset = NSNumber(integerLiteral: Int(offset) + Int(limit))
+        Business.searchWithTerm(term: "Restaurants", limit: limit, offset: offset, distanceMeters: distanceMeters, sort: sortOptions, categories: categories, deals: withDeal) { (businesses: [Business]?, error: Error?) -> Void in
+            self.isMoreDataLoading = false
             self.filteredBusinesses = businesses
             self.tableView.reloadData()
         }
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("hola")
+//        if (!isMoreDataLoading) {
+//            // Calculate the position of one screen length before the bottom of the results
+//            let scrollViewContentHeight = tableView.contentSize.height
+//            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+//            
+//            // When the user has scrolled past the threshold, start requesting
+//            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+//                isMoreDataLoading = true
+//                loadMoreData()
+//            }
+//        }
+//    }
+    
+//    func loadMoreData() {
+//        offset = NSNumber(integerLiteral: Int(offset) + Int(limit))
+//        Business.searchWithTerm(term: "Restaurants", limit: limit, offset: offset, distanceMeters: distanceMeters, sort: sortOptions, categories: categories, deals: withDeal) { (businesses: [Business]?, error: Error?) -> Void in
+//            self.isMoreDataLoading = false
+//            self.filteredBusinesses = businesses
+//            self.tableView.reloadData()
+//        }
+//      
+//    }
     
 }

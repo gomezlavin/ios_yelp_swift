@@ -12,6 +12,7 @@ class SelectCell: UITableViewCell {
 
     @IBOutlet weak var selectLabel: UILabel!
     @IBOutlet weak var selectImageView: UIImageView!
+    @IBOutlet weak var expandLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
